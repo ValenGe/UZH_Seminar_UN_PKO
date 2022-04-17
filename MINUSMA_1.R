@@ -3,10 +3,25 @@ library(lubridate)
 library(readr)
 library(extrafont)
 
+## Load dataset
+
 minusma_violence <- read_csv("MINUSMA/2017-01-01-2020-12-31-Mali.csv")
 
+## Plot 1: Time series
+
+# Create blank time series
+
+time_data <-
+  as_tibble(rep(seq(ymd('2017-01-01'),ymd('2020-12-31'), by = 'months'), 10)) %>%
+  rename("event_month" = "value") %>%
+  arrange(event_month)
+admin1 <- unique(minusma_violence$admin1)
+time_data$admin1 <- rep(admin1, 48)
+
+# Plotting
+
 trial_1 <- 
-  minusma_violence %>%
+  full_join(x = time_data, y= minusma_violence %>%
   filter(event_type == "Violence against civilians") %>%
   mutate(event_date = dmy(event_date, 
                           truncated = 2L),
@@ -14,7 +29,11 @@ trial_1 <-
   group_by(data_id, event_month, admin1) %>%
   summarise(fatalities = mean(fatalities)) %>%
   group_by(event_month, admin1) %>%
-  summarise(poc_events = n()) %>%
+  summarise(poc_events = n(),
+            fatalities = sum(fatalities)), 
+  by = c("event_month", "admin1")) %>%
+  mutate(poc_events = ifelse(is.na(poc_events), 0, poc_events),
+         fatalities = ifelse(is.na(fatalities), 0, fatalities)) %>%
   ggplot(aes(x = event_month, 
              y = poc_events, 
              color = admin1)) + 
@@ -48,9 +67,11 @@ trial_1 <-
   guides(color = guide_legend(ncol = 2)) 
 trial_1
 
-ggsave(filename = "trial_1.svg",
-       plot = trial_1,
-       device = svg)  
+#ggsave(filename = "trial_1.svg",
+#       plot = trial_1,
+#       device = svg)  
+
+## Plot 2: PoC events in 2020
 
 trial_2 <- 
   minusma_violence %>%
@@ -81,9 +102,11 @@ trial_2 <-
   coord_flip()
 trial_2
 
-ggsave(filename = "trial_2.svg",
-       plot = trial_2,
-       device = svg) 
+#ggsave(filename = "trial_2.svg",
+#       plot = trial_2,
+#       device = svg) 
+
+## Plot 3: PoC events and fatalities
 
 trial_3 <- 
   minusma_violence %>% 
@@ -111,8 +134,9 @@ trial_3 <-
        subtitle = "January 2020 - December 2020") +
   scale_y_continuous(limits = c(0, 750),
                      n.breaks = 7) +
-  scale_fill_manual(labels = c("fatalities" = "Fatalities", "poc_events" = "Number of events"),
-                    values = c("fatalities" = "#b4d2ff", "poc_events" = "#009edb")) +
+  scale_fill_manual(breaks = c("poc_events", "fatalities"),
+                    labels = c("poc_events" = "Number of events", "fatalities" = "Fatalities"),
+                    values = c("poc_events" = "#009edb", "fatalities" = "#b4d2ff")) +
   theme(text = element_text(family = "Arial"), 
         panel.background = element_blank(),
         plot.title = element_text(size = 30,
@@ -128,6 +152,6 @@ trial_3 <-
   coord_flip()
 trial_3
 
-ggsave(filename = "trial_3.svg",
-       plot = trial_3,
-       device = svg)
+#ggsave(filename = "trial_3.svg",
+#       plot = trial_3,
+#       device = svg)
