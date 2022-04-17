@@ -17,7 +17,7 @@ trial_1 <-
   summarise(poc_events = n()) %>%
   ggplot(aes(x = event_month, 
              y = poc_events, 
-             color = admin1)) + # Vorsicht! Bei "Sexual violence" (und anderen) gibt es wiederholt 0, wird aber nicht vis.
+             color = admin1)) + 
   geom_line(size = 1) +
   stat_summary(fun = sum, na.rm = TRUE, linetype = "dashed", color = 'black', geom ='line') +
   scale_color_viridis_d() +
