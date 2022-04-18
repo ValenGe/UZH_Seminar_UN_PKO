@@ -7,6 +7,8 @@ library(extrafont)
 
 minusma_violence <- read_csv("MINUSMA/2017-01-01-2020-12-31-Mali.csv")
 
+### Overview ###
+
 ## Plot 1: Time series
 
 # Create blank time series
@@ -155,3 +157,83 @@ trial_3
 #ggsave(filename = "trial_3.svg",
 #       plot = trial_3,
 #       device = svg)
+
+### Gao & Menaka ###
+
+## Plot 1: Time series
+
+# Create blank time series
+
+time_data_gm <-
+  as_tibble(rep(seq(ymd('2020-01-01'),ymd('2020-12-31'), by = 'months'), 6)) %>%
+  rename("event_month" = "value") %>%
+  arrange(event_month)
+sub_event_type_gm <- 
+  minusma_violence %>%
+  mutate(event_date = dmy(event_date, truncated = 2L),
+         event_month = floor_date(event_date, "month")) %>%
+  filter(event_type == "Violence against civilians",
+         admin1 %in% c("Gao", "Menaka"),
+         event_month >= "2020-01-01",
+         event_month <= "2020-12-01") %>%
+  group_by(data_id, event_month, admin1, sub_event_type) %>%
+  summarise(fatalities = mean(fatalities)) %>%
+  group_by(event_month, admin1, sub_event_type) %>%
+  summarise(poc_events = n(),
+            fatalities = sum(fatalities))
+sub_event_type_gm <- unique(sub_event_type_gm$sub_event_type)
+time_data_gm$sub_event_type <- rep(sub_event_type_gm, 24)
+time_data_gm$admin1 <- rep(c(rep("Gao",3), rep("Menaka", 3)), 12)
+
+# Plotting
+
+gm_ts <- 
+  full_join(x = time_data_gm, 
+            y= minusma_violence %>%
+              mutate(event_date = dmy(event_date, 
+                                      truncated = 2L),
+                     event_month = floor_date(event_date, "month")) %>%
+              filter(event_type == "Violence against civilians",
+                     admin1 %in% c("Gao", "Menaka"),
+                     event_month >= "2020-01-01",
+                     event_month <= "2020-12-01") %>%
+              group_by(data_id, event_month, admin1, sub_event_type) %>%
+              summarise(fatalities = mean(fatalities)) %>%
+              group_by(event_month, admin1, sub_event_type) %>%
+              summarise(incidents = n(),
+                        fatalities = sum(fatalities)), 
+            by = c("event_month", "admin1", "sub_event_type")) %>%
+  mutate(incidents = ifelse(is.na(incidents), 0, incidents),
+         fatalities = ifelse(is.na(fatalities), 0, fatalities)) %>%
+  ggplot(aes(x = event_month, 
+             y = incidents)) + 
+  geom_line(aes(linetype = sub_event_type, 
+             color = admin1),
+            size = 1) +
+  scale_color_viridis_d() +
+  scale_x_date(date_breaks = "month",  
+               date_labels = "%m/%Y",
+               limits = ymd(c("2020-01-01", "2020-12-01")),
+               expand = expansion(mult = c(0.025, 0.025))) +
+  scale_y_continuous(limits = c(0, 15),
+                     n.breaks = 8) +
+  labs(title = "PoC incidents in Mali",
+       subtitle = "January 2020 - December 2020",
+       x = "Time",
+       y = "Number of events") +
+  theme(text = element_text(family = "Arial"), # UN color: #009edb
+        panel.background = element_blank(),
+        plot.title = element_text(size = 30,
+                                  face = "bold"),
+        plot.subtitle = element_text(size = 15, 
+                                     face = "italic"),
+        axis.line = element_line(linetype = "solid"),
+        axis.title = element_blank(),
+        legend.position = c(0.8,1),
+        legend.box = "horizontal",
+        legend.title = element_blank(),
+        legend.key = element_blank(),
+        legend.text = element_text(color = "black"),
+        axis.text.x = element_text(angle = 45, 
+                                   hjust=1)) 
+gm_ts
