@@ -213,6 +213,81 @@ ggsave(filename = "overview_regions_plot.svg",
        device = svg,
        path = "Graphics")
 
+### Plot 3: Overview actors
+
+## Create table containing number of incidents and fatalities per perpetrator
+
+overview_actors <- 
+  minusma_violence %>%
+  filter(event_type == "Violence against civilians", 
+         actor1 != "Civilians (Mali)", 
+         actor1 != "Civilians (Benin)",
+         actor1 != "Civilians (International)",
+         actor1 != "Civilians (Niger)",
+         actor1 != "Civilians (Burkina Faso)",
+         actor1 != "Civilians (Switzerland)",
+         year == 2020) %>%
+  mutate(event_date = dmy(event_date, 
+                          truncated = 2L),
+         event_month = floor_date(event_date, "month")) %>%
+  group_by(actor1) %>%
+  summarise(poc_events = n(),
+            fatalities = sum(fatalities)) %>%
+  pivot_longer(c(poc_events, fatalities),
+               names_to = "type",
+               values_to = "count")
+
+overview_actors_plot <-
+  overview_actors %>%
+  ggplot(aes(x = reorder(actor1, -count),
+             y = count,
+             fill = type)) +
+  geom_col(width = 0.925, 
+           position = "dodge")  +
+  scale_y_continuous(limits = c(0, 250),
+                     n.breaks = 7) +
+  scale_x_discrete(labels = c("Islamic State (West Africa) - Greater Sahara Faction" = "Islamic State (West Africa) \n- Greater Sahara Faction",
+                              "JNIM: Group for Support of Islam and Muslims and/or Islamic State (West Africa) - Greater Sahara Faction" = "JNIM: Group for Support of Islam and Muslims and/or \nIslamic State (West Africa) - Greater Sahara Faction",
+                              "Unidentified Armed Group (Mali)" = "Unidentified Armed Group",
+                              "Military Forces of Niger (2011-2021)" = "Military Forces of Niger \n(2011-2021)",
+                              "JNIM: Group for Support of Islam and Muslims" = "JNIM: Group for Support \nof Islam and Muslims",
+                              "Arab Ethnic Militia (Mali)" = "Arab Ethnic Militia",
+                              "Military Forces of France (2017-)" = "Military Forces of France \n(2017-)",
+                              "Military Forces of Mali (2013-2020)" = "Military Forces of Mali \n(2013-2020)",
+                              "Unidentified Communal Militia (Mali)" = "Unidentified Communal Militia",
+                              "Tuareg Ethnic Militia (Mali)" = "Tuareg Ethnic Militia",
+                              "Soninke Ethnic Militia (Mali)" = "Soninke Ethnic Militia",
+                              "Police Forces of Mali (2013-2020)" = "Police Forces of Mali \n(2013-2020)",
+                              "Military Forces of Mali (2020-2021)" = "Military Forces of Mali \n(2020-2021)",
+                              "Military Forces of Burkina Faso (2015-)" = "Military Forces of Burkina Faso \n(2015-)",
+                              "Dozo Communal Militia (Mali)" = "Dozo Communal Militia")) +
+  scale_fill_manual(breaks = c("poc_events", "fatalities"),
+                    labels = c("poc_events" = "Number of events", "fatalities" = "Fatalities"),
+                    values = c("poc_events" = "#009edb", "fatalities" = "#b4d2ff")) +
+  theme(text = element_text(family = "Arial"), # UN color: #009edb
+        panel.background = element_blank(),
+        plot.background = element_rect(color = "black"),
+        axis.title = element_blank(),
+        axis.ticks.y = element_blank(),
+        legend.box = "vertical",
+        legend.title = element_blank(),
+        legend.key = element_blank(),
+        legend.text = element_text(color = "black", 
+                                   size = 12),
+        legend.position = c(.8,.9),
+        axis.text = element_text(size = 12,
+                                 colour = "black"),
+        axis.text.x = element_text(size = 12)) +
+  coord_flip()
+overview_actors_plot
+
+ggsave(filename = "overview_actors_plot.svg",
+       plot = overview_actors_plot,
+       device = svg,
+       path = "Graphics",
+       width = 8.97,
+       height = 11.2)
+
 ### Mopti ###
 
 ### Plot 1: Time series
