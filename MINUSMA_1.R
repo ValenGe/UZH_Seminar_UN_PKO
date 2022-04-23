@@ -61,7 +61,7 @@ overview_ts_plot <-
   scale_y_continuous(limits = c(0, 65),
                      n.breaks = 8) +
   labs(title = "PoC incidents in Mali",
-       subtitle = "January 2017 - December 2021") +
+       subtitle = "January 2017 - December 2020") +
   theme(text = element_text(family = "Arial"), # UN color: #009edb
         panel.background = element_blank(),
         plot.title = element_text(size = 26,
