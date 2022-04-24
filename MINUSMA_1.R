@@ -62,7 +62,7 @@ overview_ts_plot <-
                      n.breaks = 8) +
   labs(title = "PoC incidents in Mali",
        subtitle = "January 2017 - December 2020") +
-  theme(text = element_text(family = "Arial"), # UN color: #009edb
+  theme(text = element_text(family = "Times New Roman"), # UN color: #009edb
         panel.background = element_blank(),
         plot.title = element_text(size = 26,
                                   face = "bold"),
@@ -128,7 +128,7 @@ overview_ts_subset_plot <-
                      n.breaks = 8) +
   labs(title = "PoC incidents in Mali",
        subtitle = "January 2017 - December 2021") +
-  theme(text = element_text(family = "Arial"), # UN color: #009edb
+  theme(text = element_text(family = "Times New Roman"), # UN color: #009edb
         panel.background = element_blank(),
         plot.title = element_text(size = 26,
                                   face = "bold"),
@@ -187,7 +187,7 @@ overview_regions_plot <-
   scale_fill_manual(breaks = c("poc_events", "fatalities"),
                     labels = c("poc_events" = "Number of events", "fatalities" = "Fatalities"),
                     values = c("poc_events" = "#009edb", "fatalities" = "#b4d2ff")) +
-  theme(text = element_text(family = "Arial"), # UN color: #009edb
+  theme(text = element_text(family = "Times New Roman"), # UN color: #009edb
         panel.background = element_blank(),
         plot.background = element_rect(color = "black"),
         plot.title = element_text(size = 26,
@@ -264,7 +264,7 @@ overview_actors_plot <-
   scale_fill_manual(breaks = c("poc_events", "fatalities"),
                     labels = c("poc_events" = "Number of events", "fatalities" = "Fatalities"),
                     values = c("poc_events" = "#009edb", "fatalities" = "#b4d2ff")) +
-  theme(text = element_text(family = "Arial"), # UN color: #009edb
+  theme(text = element_text(family = "Times New Roman"), # UN color: #009edb
         panel.background = element_blank(),
         plot.background = element_rect(color = "black"),
         axis.title = element_blank(),
@@ -367,7 +367,7 @@ m_ts_plot <-
                      n.breaks = 4) +
   labs(title = "PoC incidents in Mopti Region",
        subtitle = "January 2020 - December 2020") +
-  theme(text = element_text(family = "Arial"), # UN color: #009edb
+  theme(text = element_text(family = "Times New Roman"), # UN color: #009edb
         panel.background = element_blank(),
         plot.title = element_text(size = 26,
                                   face = "bold"),
@@ -438,7 +438,7 @@ m_actors_plot <-
   scale_fill_manual(breaks = c("poc_events", "fatalities"),
                     labels = c("poc_events" = "Number of events", "fatalities" = "Fatalities"),
                     values = c("poc_events" = "#009edb", "fatalities" = "#b4d2ff")) +
-  theme(text = element_text(family = "Arial"), # UN color: #009edb
+  theme(text = element_text(family = "Times New Roman"), # UN color: #009edb
         panel.background = element_blank(),
         plot.background = element_rect(color = "black"),
         axis.title = element_blank(),
@@ -514,7 +514,7 @@ tk_ts_plot <-
                      n.breaks = 4) +
   labs(title = "PoC incidents in Tombouctou & Kidal Regions",
        subtitle = "January 2020 - December 2020") +
-  theme(text = element_text(family = "Arial"), # UN color: #009edb
+  theme(text = element_text(family = "Times New Roman"), # UN color: #009edb
         panel.background = element_blank(),
         plot.title = element_text(size = 26,
                                   face = "bold"),
@@ -584,7 +584,7 @@ tk_actors_plot <-
   scale_fill_manual(breaks = c("poc_events", "fatalities"),
                     labels = c("poc_events" = "Number of events", "fatalities" = "Fatalities"),
                     values = c("poc_events" = "#009edb", "fatalities" = "#b4d2ff")) +
-  theme(text = element_text(family = "Arial"), # UN color: #009edb
+  theme(text = element_text(family = "Times New Roman"), # UN color: #009edb
         panel.background = element_blank(),
         plot.background = element_rect(color = "black"),
         axis.title = element_blank(),
@@ -660,7 +660,7 @@ gm_ts_plot <-
                      n.breaks = 5) +
   labs(title = "PoC incidents in Gao & Menaka Regions",
        subtitle = "January 2020 - December 2020") +
-  theme(text = element_text(family = "Arial"), # UN color: #009edb
+  theme(text = element_text(family = "Times New Roman"), # UN color: #009edb
         panel.background = element_blank(),
         plot.title = element_text(size = 26,
                                   face = "bold"),
@@ -730,7 +730,7 @@ gm_actors_plot <-
   scale_fill_manual(breaks = c("poc_events", "fatalities"),
                     labels = c("poc_events" = "Number of events", "fatalities" = "Fatalities"),
                     values = c("poc_events" = "#009edb", "fatalities" = "#b4d2ff")) +
-  theme(text = element_text(family = "Arial"), # UN color: #009edb
+  theme(text = element_text(family = "Times New Roman"), # UN color: #009edb
         panel.background = element_blank(),
         plot.background = element_rect(color = "black"),
         axis.title = element_blank(),
