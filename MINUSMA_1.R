@@ -229,7 +229,18 @@ overview_actors <-
          year == 2020) %>%
   mutate(event_date = dmy(event_date, 
                           truncated = 2L),
-         event_month = floor_date(event_date, "month")) %>%
+         event_month = floor_date(event_date, "month"),
+         actor1 = ifelse(actor1 == "Military Forces of France (2017-)", "Other", actor1),
+         actor1 = ifelse(actor1 == "Ganda Izo", "Other", actor1),
+         actor1 = ifelse(actor1 == "Unidentified Communal Militia (Mali)", "Other", actor1),
+         actor1 = ifelse(actor1 == "Arab Ethnic Militia (Mali)", "Other", actor1),
+         actor1 = ifelse(actor1 == "Tuareg Ethnic Militia (Mali)", "Other", actor1),
+         actor1 = ifelse(actor1 == "Soninke Ethnic Militia (Mali)", "Other", actor1),
+         actor1 = ifelse(actor1 == "Police Forces of Mali (2013-2020)", "Other", actor1),
+         actor1 = ifelse(actor1 == "Military Forces of Niger (2011-2021)", "Other", actor1),
+         actor1 = ifelse(actor1 == "Military Forces of Mali (2013-2020)", "Military Forces of Mali", actor1),
+         actor1 = ifelse(actor1 == "Military Forces of Mali (2020-2021)", "Military Forces of Mali", actor1),
+         actor1 = ifelse(actor1 == "JNIM: Group for Support of Islam and Muslims and/or Islamic State (West Africa) - Greater Sahara Faction", "JNIM: Group for Support of Islam and Muslims", actor1)) %>%
   group_by(actor1) %>%
   summarise(poc_events = n(),
             fatalities = sum(fatalities)) %>%
@@ -244,23 +255,15 @@ overview_actors_plot <-
              fill = type)) +
   geom_col(width = 0.925, 
            position = "dodge")  +
-  scale_y_continuous(limits = c(0, 250),
+  scale_y_continuous(limits = c(0, 275),
                      n.breaks = 7) +
   scale_x_discrete(labels = c("Islamic State (West Africa) - Greater Sahara Faction" = "Islamic State (West Africa) \n- Greater Sahara Faction",
-                              "JNIM: Group for Support of Islam and Muslims and/or Islamic State (West Africa) - Greater Sahara Faction" = "JNIM: Group for Support of Islam and Muslims and/or \nIslamic State (West Africa) - Greater Sahara Faction",
                               "Unidentified Armed Group (Mali)" = "Unidentified Armed Group",
-                              "Military Forces of Niger (2011-2021)" = "Military Forces of Niger \n(2011-2021)",
                               "JNIM: Group for Support of Islam and Muslims" = "JNIM: Group for Support \nof Islam and Muslims",
-                              "Arab Ethnic Militia (Mali)" = "Arab Ethnic Militia",
-                              "Military Forces of France (2017-)" = "Military Forces of France \n(2017-)",
-                              "Military Forces of Mali (2013-2020)" = "Military Forces of Mali \n(2013-2020)",
-                              "Unidentified Communal Militia (Mali)" = "Unidentified Communal Militia",
-                              "Tuareg Ethnic Militia (Mali)" = "Tuareg Ethnic Militia",
-                              "Soninke Ethnic Militia (Mali)" = "Soninke Ethnic Militia",
-                              "Police Forces of Mali (2013-2020)" = "Police Forces of Mali \n(2013-2020)",
-                              "Military Forces of Mali (2020-2021)" = "Military Forces of Mali \n(2020-2021)",
-                              "Military Forces of Burkina Faso (2015-)" = "Military Forces of Burkina Faso \n(2015-)",
-                              "Dozo Communal Militia (Mali)" = "Dozo Communal Militia")) +
+                              "Military Forces of Burkina Faso (2015-)" = "Military Forces of Burkina Faso",
+                              "Dozo Communal Militia (Mali)" = "Dozo Communal Militia",
+                              "Fulani Ethnic Militia (Mali)" = "Fulani Ethnic Militia",
+                              "Dogon Ethnic Militia (Mali)" = "Dogon Ethnic Militia")) +
   scale_fill_manual(breaks = c("poc_events", "fatalities"),
                     labels = c("poc_events" = "Number of events", "fatalities" = "Fatalities"),
                     values = c("poc_events" = "#009edb", "fatalities" = "#b4d2ff")) +
@@ -284,9 +287,7 @@ overview_actors_plot
 ggsave(filename = "overview_actors_plot.svg",
        plot = overview_actors_plot,
        device = svg,
-       path = "Graphics",
-       width = 8.97,
-       height = 11.2)
+       path = "Graphics")
 
 ### Mopti ###
 
@@ -406,7 +407,10 @@ m_actors <-
          year == 2020) %>%
   mutate(event_date = dmy(event_date, 
                           truncated = 2L),
-         event_month = floor_date(event_date, "month")) %>%
+         event_month = floor_date(event_date, "month"),
+         actor1 = ifelse(actor1 == "Military Forces of Mali (2013-2020)", "Military Forces of Mali", actor1),
+         actor1 = ifelse(actor1 == "Military Forces of Mali (2020-2021)", "Military Forces of Mali", actor1),
+         actor1 = ifelse(actor1 == "JNIM: Group for Support of Islam and Muslims and/or Islamic State (West Africa) - Greater Sahara Faction", "JNIM: Group for Support of Islam and Muslims", actor1)) %>%
   group_by(actor1) %>%
   summarise(poc_events = n(),
             fatalities = sum(fatalities)) %>%
@@ -423,18 +427,15 @@ m_actors_plot <-
              fill = type)) +
   geom_col(width = 0.925, 
            position = "dodge")  +
-  scale_y_continuous(limits = c(0, 170),
+  scale_y_continuous(limits = c(0, 200),
                      n.breaks = 7) +
   scale_x_discrete(labels = c("Fulani Ethnic Militia (Mali)" = "Fulani Ethnic Militia",
-                              "Military Forces of Mali (2013-2020)" = "Military Forces of Mali \n(2013-2020)",
                               "JNIM: Group for Support of Islam and Muslims" = "JNIM: Group for Support \nof Islam and Muslims",
                               "Unidentified Armed Group (Mali)" = "Unidentified Armed Group",
-                              "Military Forces of Burkina Faso (2015-)" = "Military Forces of Burkina Faso \n(2015-)",
+                              "Military Forces of Burkina Faso (2015-)" = "Military Forces of Burkina Faso",
                               "Dogon Ethnic Militia (Mali)" = "Dogon Ethnic Militia",
                               "Dozo Communal Militia (Mali)" = "Dozo Communal Militia",
-                              "Military Forces of Mali (2020-2021)" = "Military Forces of Mali \n(2020-2021)",
-                              "JNIM: Group for Support of Islam and Muslims and/or Islamic State (West Africa) - Greater Sahara Faction" = "JNIM: Group for Support of Islam and Muslims and/or \nIslamic State (West Africa) - Greater Sahara Faction",
-                              "Police Forces of Mali (2013-2020)" = "Police Forces of Mali \n(2013-2020)")) +
+                              "Police Forces of Mali (2013-2020)" = "Police Forces of Mali")) +
   scale_fill_manual(breaks = c("poc_events", "fatalities"),
                     labels = c("poc_events" = "Number of events", "fatalities" = "Fatalities"),
                     values = c("poc_events" = "#009edb", "fatalities" = "#b4d2ff")) +
@@ -554,7 +555,10 @@ tk_actors <-
          year == 2020) %>%
   mutate(event_date = dmy(event_date, 
                           truncated = 2L),
-         event_month = floor_date(event_date, "month")) %>%
+         event_month = floor_date(event_date, "month"),
+         actor1 = ifelse(actor1 == "Military Forces of Mali (2013-2020)", "Military Forces of Mali", actor1),
+         actor1 = ifelse(actor1 == "Military Forces of Mali (2020-2021)", "Military Forces of Mali", actor1),
+         actor1 = ifelse(actor1 == "JNIM: Group for Support of Islam and Muslims and/or Islamic State (West Africa) - Greater Sahara Faction", "JNIM: Group for Support of Islam and Muslims", actor1)) %>%
   group_by(actor1) %>%
   summarise(poc_events = n(),
             fatalities = sum(fatalities)) %>%
@@ -575,11 +579,8 @@ tk_actors_plot <-
                      n.breaks = 7) +
   scale_x_discrete(labels = c("Islamic State (West Africa) - Greater Sahara Faction" = "Islamic State (West Africa) \n- Greater Sahara Faction",
                               "Unidentified Armed Group (Mali)" = "Unidentified Armed Group",
-                              "Military Forces of Niger (2011-2021)" = "Military Forces of Niger \n(2011-2021)",
                               "JNIM: Group for Support of Islam and Muslims" = "JNIM: Group for Support \nof Islam and Muslims",
-                              "Military Forces of Mali (2013-2020)" = "Military Forces of Mali \n(2013-2020)",
-                              "JNIM: Group for Support of Islam and Muslims and/or Islamic State (West Africa) - Greater Sahara Faction" = "JNIM: Group for Support of Islam and Muslims and/or \nIslamic State (West Africa) - Greater Sahara Faction",
-                              "Military Forces of Burkina Faso (2015-)" = "Military Forces of Burkina Faso \n(2015-)",
+                              "Military Forces of Burkina Faso (2015-)" = "Military Forces of Burkina Faso",
                               "Tuareg Ethnic Militia (Mali)" = "Tuareg Ethnic Militia")) +
   scale_fill_manual(breaks = c("poc_events", "fatalities"),
                     labels = c("poc_events" = "Number of events", "fatalities" = "Fatalities"),
@@ -702,7 +703,10 @@ gm_actors <-
          year == 2020) %>%
   mutate(event_date = dmy(event_date, 
                           truncated = 2L),
-         event_month = floor_date(event_date, "month")) %>%
+         event_month = floor_date(event_date, "month"),
+         actor1 = ifelse(actor1 == "Military Forces of Mali (2013-2020)", "Military Forces of Mali", actor1),
+         actor1 = ifelse(actor1 == "Military Forces of Mali (2020-2021)", "Military Forces of Mali", actor1),
+         actor1 = ifelse(actor1 == "JNIM: Group for Support of Islam and Muslims and/or Islamic State (West Africa) - Greater Sahara Faction", "JNIM: Group for Support of Islam and Muslims", actor1)) %>%
   group_by(actor1) %>%
   summarise(poc_events = n(),
             fatalities = sum(fatalities)) %>%
@@ -721,11 +725,10 @@ gm_actors_plot <-
                      n.breaks = 7) +
   scale_x_discrete(labels = c("Islamic State (West Africa) - Greater Sahara Faction" = "Islamic State (West Africa) \n- Greater Sahara Faction",
                               "Unidentified Armed Group (Mali)" = "Unidentified Armed Group",
-                              "Military Forces of Niger (2011-2021)" = "Military Forces of Niger \n(2011-2021)",
+                              "Military Forces of Niger (2011-2021)" = "Military Forces of Niger",
                               "JNIM: Group for Support of Islam and Muslims" = "JNIM: Group for Support \nof Islam and Muslims",
                               "Arab Ethnic Militia (Mali)" = "Arab Ethnic Militia",
-                              "Military Forces of France (2017-)" = "Military Forces of France \n(2017-)",
-                              "Military Forces of Mali (2013-2020)" = "Military Forces of Mali \n(2013-2020)",
+                              "Military Forces of France (2017-)" = "Military Forces of France",
                               "Unidentified Communal Militia (Mali)" = "Unidentified Communal Militia")) +
   scale_fill_manual(breaks = c("poc_events", "fatalities"),
                     labels = c("poc_events" = "Number of events", "fatalities" = "Fatalities"),
